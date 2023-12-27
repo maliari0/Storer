@@ -16,6 +16,7 @@ namespace Storer.Data
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Menu> Menus { get; set; }
+        public DbSet<CartItem> Carts { get; set; }
 
         public DbSet<Rezervasyon> Rezervasyons { get; set; }
         public DbSet<Galeri> Galeris { get; set; }

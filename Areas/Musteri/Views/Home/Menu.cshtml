@@ -3,6 +3,34 @@
     ViewData["Title"] = "Kategoriler";
     Layout = "~/Views/Shared/MasterPage.cshtml";
 }
+@section scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function addToCart(productId, productName, description, image, price) {
+            $.ajax({
+                type: "POST",
+                url: "/Musteri/Home/AddToCart",
+                data: { productId: productId, productName: productName, description: description, image: image, price: price },
+                success: function (result) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Ürün sepete eklendi!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((result) => {
+                        window.location.href = "/Musteri/Home/Cart";
+                    });
+                },
+                error: function (error) {
+                    console.error("Ürün eklenirken bir hata oluştu: " + error.responseText);
+                }
+            });
+        }
+    </script>
+}
+
 
 <!-- Title -->
 <section class="bg-title-page flex-c-m p-t-160 p-b-80 p-l-15 p-r-15" style="background-image: url(/WebSite/images/sh-tshirt-many-title-dark.png);">
@@ -16,7 +44,6 @@
 </div>
 
 <section class="section-lunch bgwhite">
-
     <div class="container">
         <div class="row p-t-10">
             @foreach (var item in Model)
@@ -40,6 +67,10 @@
                             <span class="txt22 m-t-20">
                                 @item.Price (₺)
                             </span>
+
+                            <button class="btn btn-primary m-t-20" onclick="addToCart(@item.Id, '@item.Title', '@item.Description', '@item.Image', @item.Price)">
+                                <span style="font-size: 18px;">+</span>
+                            </button>
                         </div>
                     </div>
                 </div>

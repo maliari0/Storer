@@ -14,8 +14,8 @@ using System.Threading.Tasks;
 
 namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontroller yolunu düzenledik
 {
-	[Area("Musteri")]
-	public class HomeController : Controller
+    [Area("Musteri")]
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _db;
@@ -34,13 +34,13 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
         public IActionResult Index()
         {
             //özel menüleri ana sayfada getirme işlemi
-            var menu = _db.Menus.Where(i=>i.OzelMenu).ToList();
+            var menu = _db.Menus.Where(i => i.OzelMenu).ToList();
             return View(menu);
         }
         public IActionResult CategoryDetails(int? id)
         {
             //kategorilere ait menüleri getirme
-            var menu = _db.Menus.Where(i=>i.CategoryId == id).ToList();
+            var menu = _db.Menus.Where(i => i.CategoryId == id).ToList();
             ViewBag.KategoriId = id;
             return View(menu);
         }
@@ -53,7 +53,7 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Iletisim([Bind("Id,Name,Email,Telefon,Mesaj")]Iletisim iletisim)
+        public async Task<IActionResult> Iletisim([Bind("Id,Name,Email,Telefon,Mesaj")] Iletisim iletisim)
         {
             if (ModelState.IsValid)
             {
@@ -125,25 +125,7 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
             var galeri = _db.Galeris.ToList();
             return View(galeri);
         }
-        public IActionResult Rezervasyon()
-        {
-            return View();
-        }
 
-        // POST: Yonetici/Rezervasyon/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Rezervasyon([Bind("Id,Name,Email,TelefonNo,Sayi,Saat,Tarih")] Rezervasyon rezervasyon)
-        {
-            if (ModelState.IsValid)
-            {
-                _db.Add(rezervasyon);
-                await _db.SaveChangesAsync();
-                _toast.AddSuccessToastMessage("Rezervasyon işleminiz gerçekleşmiştir.");
-                return RedirectToAction(nameof(Index));
-            }
-            return View(rezervasyon);
-        }
 
         public IActionResult Menu()
         {
@@ -151,6 +133,97 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
             var menu = _db.Menus.ToList();
             return View(menu);
         }
+        private static List<CartItem> cartItems = new List<CartItem>();
+        public IActionResult Cart()
+        {
+            var cartItems = _db.Carts.ToList();
+            return View(cartItems);
+        }
+
+        [HttpPost]
+        public ActionResult AddToCart(int productId)
+        {
+            try
+            {
+                var menu = _db.Menus.Find(productId);
+
+                if (menu != null)
+                {
+                    var existingItem = _db.Carts.FirstOrDefault(item => item.ProductId == productId);
+
+                    if (existingItem != null)
+                    {
+                        existingItem.Quantity++;
+                    }
+                    else
+                    {
+                        _db.Carts.Add(new CartItem
+                        {
+                            ProductId = menu.Id,
+                            ProductName = menu.Title,
+                            Description = menu.Description,
+                            Image = menu.Image,
+                            Price = menu.Price,
+                            Quantity = 1
+                        });
+                    }
+
+                    _db.SaveChanges();
+
+                    return Json(new { success = true, message = "Ürün sepete eklendi!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Ürün bulunamadı." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Ürün eklenirken bir hata oluştu: " + ex.Message });
+            }
+        }
+
+
+        public ActionResult RemoveFromCart(int productId)
+        {
+            var itemToRemove = _db.Carts.Find(productId);
+
+            if (itemToRemove != null)
+            {
+                _db.Carts.Remove(itemToRemove);
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public ActionResult ClearCart()
+        {
+            try
+            {
+                var cartItems = _db.Carts.ToList();
+
+                foreach (var cartItem in cartItems)
+                {
+                    _db.Carts.Remove(cartItem);
+                }
+
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Sepet temizlendi!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Sepet temizlenirken bir hata oluştu: " + ex.ToString() });
+            }
+        }
+
+
+        private Menu GetMenuById(int productId)
+        {
+            return new Menu { Id = productId, Title = "Ürün Adı", Description = "Ürün Açıklaması", Image = "path/to/image.jpg", Price = 19.99 };
+        }
+
 
         public IActionResult Privacy()
         {

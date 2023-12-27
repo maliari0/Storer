@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Storer.Models.CartItem>
+@{
+    ViewData["Title"] = "Sepet";
+    Layout = "~/Views/Shared/MasterPage.cshtml";
+}
+
+<section class="bg-title-page flex-c-m p-t-160 p-b-80 p-l-15 p-r-15" style="background-image: url(/WebSite/images/sh-cart-red-title-dark.png);">
+    <h2 class="tit6 t-center">
+        Sepet
+    </h2>
+</section>
+
+<section class="section-lunch bgwhite p-3">
+    @if (Model.Any())
+    {
+        <div></div>
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-bordered mx-auto">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Fotoğraf</th>
+                            <th class="text-center">Ürün Adı</th>
+                            <th class="text-center">Fiyat</th>
+                            <th class="text-center">Adet</th>
+                            <th class="text-center">Toplam</th>
+                            <th class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center"><img src="@item.Image" alt="Product Image" style="max-width: 50px; max-height: 50px;" /></td>
+                                <td class="text-center">@item.ProductName</td>
+                                <td class="text-center">@item.Price ₺</td>
+                                <td class="text-center">@item.Quantity</td>
+                                <td class="text-center">@((item.Price * item.Quantity).ToString("c"))</td>
+                                <td class="text-center">
+                                    <button class="btn btn-danger btn-sm" onclick="removeFromCart(@item.ProductId)">-</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class=" p-3">
+                <h4 class="p-3">Toplam Fiyat: @Model.Sum(item => item.Price * item.Quantity).ToString("c")</h4>
+
+                <div class="text-right animated " data-appear="zoomIn">
+                    <button class="btn3 flex-c-m size1 txt6 trans-0-4" onclick="checkout()">Ödeme Yap</button>
+                </div>
+                <div class="text-right animated " data-appear="zoomIn">
+                    <button class="btn4 flex-c-m size1 txt6 trans-0-4" onclick="clearCart()">Sepeti Temizle</button>
+                </div>
+                
+            </div>
+            
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart-message">
+            <h1 class="text-center">Sepetiniz boş.</h1>
+            <p class="text-center">Hemen alışverişe başlamak için <a href="/">buraya tıklayın</a>.</p>
+        </div>
+    }
+</section>
+
+@section scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function removeFromCart(productId) {
+            $.ajax({
+                type: "POST",
+                url: "/Musteri/Home/RemoveFromCart",
+                data: { productId: productId },
+                success: function (result) {
+                    console.log("Ürün sepetten kaldırıldı!");
+                    window.location.reload(); // Sayfayı yenileme
+                },
+                error: function (error) {
+                    console.error("Ürün kaldırılırken bir hata oluştu: " + error.responseText);
+                }
+            });
+        }
+
+        function clearCart() {
+            $.ajax({
+                type: "POST",
+                url: "/Musteri/Home/ClearCart",
+                success: function (result) {
+                    console.log("Sepet temizlendi!");
+                    window.location.reload(); // Sayfayı yenileme
+                },
+                error: function (error) {
+                    console.error("Sepet temizlenirken bir hata oluştu: " + error.responseText);
+                }
+            });
+        }
+
+        function checkout() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Ödemeniz başarıyla tamamlandı!',
+                showConfirmButton: false,
+                timer: 2000
+            }).then((result) => {
+                clearCart(); // Ödeme tamamlandıktan sonra sepeti temizle
+            });
+        }
+    </script>
+}

@@ -4,70 +4,10 @@
     Layout = "~/Views/Shared/MasterPage.cshtml";
 }
 
-<section class="section-slide">
-    <div class="wrap-slick1">
-        <div class="slick1">
-            <div class="item-slick1 item1-slick1" style="background-image: url(/WebSite/images/slide1-01.jpg);">
-                <div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
-                    <span class="caption1-slide1 txt1 t-center animated visible-false m-b-15" data-appear="fadeInDown">
-                        Fima Storer'a
-                    </span>
-
-                    <h2 class="caption2-slide1 tit1 t-center animated visible-false m-b-37" data-appear="fadeInUp">
-                        Hoş Geldİnİz
-                    </h2>
-
-                    <div class="wrap-btn-slide1 animated visible-false" data-appear="zoomIn">
-                        <!-- Button1 -->
-                        <a asp-area="Musteri" asp-controller="Home" asp-action="Menu" class="btn1 flex-c-m size1 txt3 trans-0-4">
-                            Menü
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item-slick1 item2-slick1" style="background-image: url(/WebSite/images/master-slides-02.jpg);">
-                <div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
-                    <span class="caption1-slide1 txt1 t-center animated visible-false m-b-15" data-appear="rollIn">
-                        Fima Storer'a
-                    </span>
-
-                    <h2 class="caption2-slide1 tit1 t-center animated visible-false m-b-37" data-appear="lightSpeedIn">
-                        Hoş Geldİnİz
-                    </h2>
-
-                    <div class="wrap-btn-slide1 animated visible-false" data-appear="slideInUp">
-                        <!-- Button1 -->
-                        <a asp-area="Musteri" asp-controller="Home" asp-action="Menu" class="btn1 flex-c-m size1 txt3 trans-0-4">
-                            Menü
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item-slick1 item3-slick1" style="background-image: url(/WebSite/images/master-slides-01.jpg);">
-                <div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
-                    <span class="caption1-slide1 txt1 t-center animated visible-false m-b-15" data-appear="rotateInDownLeft">
-                        Fima Storer'a
-                    </span>
-
-                    <h2 class="caption2-slide1 tit1 t-center animated visible-false m-b-37" data-appear="rotateInUpRight">
-                        Hoş Geldİnİz
-                    </h2>
-
-                    <div class="wrap-btn-slide1 animated visible-false" data-appear="rotateIn">
-                        <!-- Button1 -->
-                        <a asp-area="Musteri" asp-controller="Home" asp-action="Menu" class="btn1 flex-c-m size1 txt3 trans-0-4">
-                            Menü
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="wrap-slick1-dots"></div>
-    </div>
+<section class="bg-title-page flex-c-m p-t-160 p-b-80 p-l-15 p-r-15" style="background-image: url(/WebSite/images/sh-tshirt-many-title-dark.png);">
+    <h2 class="tit6 t-center">
+        Kategorİler
+    </h2>
 </section>
 <div class="section-gallery p-t-20">
     @await Component.InvokeAsync("CategoryList")
