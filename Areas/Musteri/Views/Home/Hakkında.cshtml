@@ -18,14 +18,16 @@
 		Storer
 	</span>
 
-	<h3 class="tit3 t-center m-b-35 m-t-5">
-		Hİkayemİz
-	</h3>
+	@Html.ColoredHeading3("Hİkayemİz", "black", "tit3 t-center m-b-35 m-t-5")
+
+
+
 	@foreach(var item in Model)
 	{
 		<p class="t-center size32 m-l-r-auto">
 			@item.Title
 		</p>
+
 		
 	}
 

@@ -14,8 +14,7 @@ namespace Storer.ViewComponents
         }
         public IViewComponentResult Invoke()
         {
-            /*var comment=_db.Bloga.ToList();*///yönetici onayı olmadan tüm yorumları blog sayfasında gösterir//
-            var comment = _db.Blogs.Where(i=>i.Onay).ToList(); //sadece onaylı yorumları gösterir
+            var comment = _db.Yorumlars.Where(i=>i.Onay).ToList(); //sadece onaylı yorumları gösterir
             return View(comment);
         }
     }

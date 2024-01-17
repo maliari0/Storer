@@ -15,24 +15,22 @@ namespace Storer.Areas.Yonetici.Controllers
 {
     [Area("Yonetici")]
     [Authorize]
-    public class BlogController : Controller
+    public class YorumlarController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _whe;
 
-        public BlogController(ApplicationDbContext context, IWebHostEnvironment whe)
+        public YorumlarController(ApplicationDbContext context, IWebHostEnvironment whe)
         {
             _context = context;
             _whe = whe;
         }
 
-        // GET: Yonetici/Blog
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Blogs.ToListAsync());
+            return View(await _context.Yorumlars.ToListAsync());
         }
 
-        // GET: Yonetici/Blog/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,28 +38,24 @@ namespace Storer.Areas.Yonetici.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blogs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (blog == null)
+            var yorum = await _context.Yorumlars
+				.FirstOrDefaultAsync(m => m.Id == id);
+            if (yorum == null)
             {
                 return NotFound();
             }
 
-            return View(blog);
+            return View(yorum);
         }
 
-        // GET: Yonetici/Blog/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Yonetici/Blog/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Blog blog)
+        public async Task<IActionResult> Create(Yorumlar yorum)
         {
             if (!ModelState.IsValid)
             {
@@ -76,9 +70,9 @@ namespace Storer.Areas.Yonetici.Controllers
                     var extn = Path.GetExtension(files[0].FileName);
                     //menü resmini if ile kontrol ettim
                     //menü alanı boş değil ise resimleri ekler
-                    if (blog.Image != null)
+                    if (yorum.Image != null)
                     {
-                        var ImagePath = Path.Combine(_whe.WebRootPath, blog.Image.TrimStart('\\'));
+                        var ImagePath = Path.Combine(_whe.WebRootPath, yorum.Image.TrimStart('\\'));
                         //menü silinirse menüye ait resmi de menü dosyasından silmesini sağladım
                         if (System.IO.File.Exists(ImagePath))
                         {
@@ -89,16 +83,15 @@ namespace Storer.Areas.Yonetici.Controllers
                     {
                         files[0].CopyTo(filesStreams);
                     }
-                    blog.Image = @"\WebSite\menu\" + fileName + extn;
+                    yorum.Image = @"\WebSite\menu\" + fileName + extn;
                 }
-                _context.Add(blog);
+                _context.Add(yorum);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(blog);
+            return View(yorum);
         }
 
-        // GET: Yonetici/Blog/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -106,7 +99,7 @@ namespace Storer.Areas.Yonetici.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blogs.FindAsync(id);
+            var blog = await _context.Yorumlars.FindAsync(id);
             if (blog == null)
             {
                 return NotFound();
@@ -114,14 +107,11 @@ namespace Storer.Areas.Yonetici.Controllers
             return View(blog);
         }
 
-        // POST: Yonetici/Blog/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Name,Email,Image,Onay,Mesaj,Tarih")] Blog blog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Name,Email,Image,Onay,Mesaj,Tarih")] Yorumlar yorum)
         {
-            if (id != blog.Id)
+            if (id != yorum.Id)
             {
                 return NotFound();
             }
@@ -130,12 +120,12 @@ namespace Storer.Areas.Yonetici.Controllers
             {
                 try
                 {
-                    _context.Update(blog);
+                    _context.Update(yorum);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BlogExists(blog.Id))
+                    if (!BlogExists(yorum.Id))
                     {
                         return NotFound();
                     }
@@ -146,10 +136,9 @@ namespace Storer.Areas.Yonetici.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(blog);
+            return View(yorum);
         }
 
-        // GET: Yonetici/Blog/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -157,7 +146,7 @@ namespace Storer.Areas.Yonetici.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blogs
+            var blog = await _context.Yorumlars
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (blog == null)
             {
@@ -167,20 +156,19 @@ namespace Storer.Areas.Yonetici.Controllers
             return View(blog);
         }
 
-        // POST: Yonetici/Blog/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var blog = await _context.Blogs.FindAsync(id);
-            _context.Blogs.Remove(blog);
+            var yorum = await _context.Yorumlars.FindAsync(id);
+            _context.Yorumlars.Remove(yorum);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BlogExists(int id)
         {
-            return _context.Blogs.Any(e => e.Id == id);
+            return _context.Yorumlars.Any(e => e.Id == id);
         }
     }
 }

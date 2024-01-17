@@ -21,7 +21,7 @@ namespace Storer.Data
         public DbSet<Rezervasyon> Rezervasyons { get; set; }
         public DbSet<Galeri> Galeris { get; set; }
         public DbSet<Hakkında> Hakkındas { get; set; }
-        public DbSet<Blog> Blogs { get;set;}
+        public DbSet<Yorumlar> Yorumlars { get;set;}
         public DbSet<Iletisim> Iletisims { get; set; }
         public DbSet<Iletisimim> Iletisimims { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }

@@ -66,21 +66,18 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
             return View(iletisim);
         }
 
-        public IActionResult Blog()
+        public IActionResult Yorumlar()
         {
             return View();
         }
 
-        // POST: Yonetici/Blog/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Blog(Blog blog)
+        public async Task<IActionResult> Yorumlar(Yorumlar yorumlar)
         {
             if (!ModelState.IsValid)
             {
-                blog.Tarih = DateTime.Now;
+				yorumlar.Tarih = DateTime.Now;
                 //yorum tarihi müşteri girmeyecek, sistemden biz çekeceğiz. şuan için normal yapalım.
                 var files = HttpContext.Request.Form.Files;
                 //if dosya kontrolü yaptım
@@ -93,9 +90,9 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
                     var extn = Path.GetExtension(files[0].FileName);
                     //menü resmini if ile kontrol ettim
                     //menü alanı boş değil ise resimleri ekler
-                    if (blog.Image != null)
+                    if (yorumlar.Image != null)
                     {
-                        var ImagePath = Path.Combine(_whe.WebRootPath, blog.Image.TrimStart('\\'));
+                        var ImagePath = Path.Combine(_whe.WebRootPath, yorumlar.Image.TrimStart('\\'));
                         //menü silinirse menüye ait resmi de menü dosyasından silmesini sağladım
                         if (System.IO.File.Exists(ImagePath))
                         {
@@ -106,14 +103,14 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
                     {
                         files[0].CopyTo(filesStreams);
                     }
-                    blog.Image = @"\WebSite\menu\" + fileName + extn;
+                    yorumlar.Image = @"\WebSite\menu\" + fileName + extn;
                 }
-                _db.Add(blog);
+                _db.Add(yorumlar);
                 await _db.SaveChangesAsync();
                 _toast.AddSuccessToastMessage("Yorumunuz iletildi, onaylanan yorumları sayfamızdan görebilirsiniz.Teşekkür ederiz.");
                 return RedirectToAction(nameof(Index));
             }
-            return View(blog);
+            return View(yorumlar);
         }
         public IActionResult Hakkında()
         {
@@ -138,6 +135,20 @@ namespace Storer.Areas.Musteri.Controllers // namespace düzenleme ile homecontr
         {
             var cartItems = _db.Carts.ToList();
             return View(cartItems);
+        }
+
+        public IActionResult ProductDetails(int productId)
+        {
+            var menu = GetMenuById(productId);
+
+            return View(menu);
+        }
+        
+  
+        //ürün detayları sayfasında eklenebilen yorumlar
+        public IActionResult Yorum()
+        {
+            return View();
         }
 
         [HttpPost]

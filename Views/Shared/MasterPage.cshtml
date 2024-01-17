@@ -92,9 +92,9 @@
                                         <a asp-area="Musteri" asp-controller="Home" asp-action="Hakkında">Hakkımızda</a>
                                     </li>
 
-                                    @* <li>
-                                        <a asp-area="Musteri" asp-controller="Home" asp-action="Blog">Blog</a>
-                                    </li> *@
+                                    <li>
+                                        <a asp-area="Musteri" asp-controller="Home" asp-action="Yorumlar">Yorumlar</a>
+                                    </li>
 
                                     <li>
                                         <a asp-area="Musteri" asp-controller="Home" asp-action="Iletisim">İletİşİm</a>
@@ -141,7 +141,7 @@
             </li>
 
             <li class="t-center m-b-13">
-                <a asp-area="Musteri" asp-controller="Home" asp-action="Blog" class="txt19">Blog</a>
+                <a asp-area="Musteri" asp-controller="Home" asp-action="Yorumlar" class="txt19">Yorumlar</a>
             </li>
 
             <li class="t-center m-b-33">
@@ -150,8 +150,8 @@
 
             <li class="t-center">
                 <!-- Button3 -->
-                <a asp-area="Musteri" asp-controller="Home" asp-action="Rezervasyon" class="btn3 flex-c-m size13 txt11 trans-0-4 m-l-r-auto">
-                    Rezervasyon
+                <a asp-area="Musteri" asp-controller="Home" asp-action="Cart" class="btn3 flex-c-m size13 txt11 trans-0-4 m-l-r-auto">
+                    SEPET
                 </a>
             </li>
             @if(User.Identity.IsAuthenticated)

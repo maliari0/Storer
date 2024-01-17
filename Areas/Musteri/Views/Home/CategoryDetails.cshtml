@@ -4,7 +4,34 @@
     Layout = "~/Views/Shared/MasterPage.cshtml";
 }
 
-<section class="bg-title-page flex-c-m p-t-160 p-b-80 p-l-15 p-r-15" style="background-image: url(/WebSite/images/sh-tshirt-many-title-dark.png);">
+@section scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function addToCart(productId, productName, description, image, price) {
+            $.ajax({
+                type: "POST",
+                url: "/Musteri/Home/AddToCart",
+                data: { productId: productId, productName: productName, description: description, image: image, price: price },
+                success: function (result) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Ürün sepete eklendi!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((result) => {
+                        window.location.href = "/Musteri/Home/Cart";
+                    });
+                },
+                error: function (error) {
+                    console.error("Ürün eklenirken bir hata oluştu: " + error.responseText);
+                }
+            });
+        }
+    </script>
+}
+<section class="bg-title-page flex-c-m p-t-160 p-b-80 p-l-15 p-r-15" style="background-image: url(/WebSite/images/sh-cart-grey-title-dark.png);">
     <h2 class="tit6 t-center">
         Kategorİler
     </h2>
@@ -26,8 +53,9 @@
                         <!-- Block3 -->
                         <div class="blo3 flex-w flex-col-l-sm m-b-30">
                             <div class="pic-blo3 size20 bo-rad-10 hov-img-zoom m-r-28">
-                                <a><img src="@item.Image" alt="IMG-MENU"></a>
+                                <a asp-action="ProductDetails" asp-route-id="@item.Id"><img src="@item.Image" alt="IMG-MENU"></a>
                             </div>
+
 
                             <div class="text-blo3 size21 flex-col-l-m">
                                 <a class="txt21 m-b-3">
@@ -41,6 +69,9 @@
                                 <span class="txt22 m-t-20">
                                     @item.Price (₺)
                                 </span>
+                                <button class="btn btn-primary m-t-20" onclick="addToCart(@item.Id, '@item.Title', '@item.Description', '@item.Image', @item.Price)">
+                                    <span style="font-size: 18px;">+</span>
+                                </button>
                             </div>
                         </div>
                     </div>

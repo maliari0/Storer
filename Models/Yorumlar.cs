@@ -3,7 +3,7 @@ using System;
 
 namespace Storer.Models
 {
-	public class Blog
+	public class Yorumlar
 	{
 		[Key] 
 		public int Id { get; set; }
